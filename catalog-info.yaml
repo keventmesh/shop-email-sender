@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "shop-email-sender"
+  annotations:
+    github.com/project-slug: keventmesh/shop-email-sender
+    backstage.io/kubernetes-id: shop-email-sender
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  lifecycle: experimental
+  owner: "shop"
