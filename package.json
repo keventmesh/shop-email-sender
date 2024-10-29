@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "cloudevents": "^7.0.1",
-    "faas-js-runtime": "^2.2.2"
+    "faas-js-runtime": "^2.2.2",
+    "nodemailer": "^6.9.16"
   }
 }

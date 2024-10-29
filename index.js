@@ -1,4 +1,13 @@
-const { CloudEvent } = require('cloudevents');
+const {CloudEvent} = require('cloudevents');
+
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+    host: 'mailpit.event-discovery.svc',
+    port: 1025,
+    secure: false, // true for port 465, false for other ports
+    auth: {},
+});
 
 /**
  * Your CloudEvent handling function, invoked with each request.
@@ -19,15 +28,26 @@ const { CloudEvent } = require('cloudevents');
  * @param {CloudEvent} event the CloudEvent
  */
 const handle = async (context, event) => {
-  // YOUR CODE HERE
-  context.log.info("context", context);
-  context.log.info("event", event);
+    context.log.debug("context", context);
+    context.log.debug("event", event);
 
-  return new CloudEvent({
-    source: 'event.handler',
-    type: 'echo',
-    data: event.data
-  });
+    const info = await transporter.sendMail({
+        from: '"Website Order" <shop-notifications@shop.com>',
+        to: "shop-notifications@example.com",
+        subject: "New website order ✔",
+        html: "<b>Hello world?</b>", // html body
+    });
+    console.log("Sent email", "info", info);
+
+    return new CloudEvent({
+        source: 'com.shop.products.order.notifications.email.sender',
+        type: 'com.shop.products.order.notifications.email.sent',
+        dataschema: event.dataschema,
+        datacontenttype: event.datacontenttype,
+        data: event.data,
+        data_base64: event.data_base64,
+        subject: event.subject,
+    });
 };
 
-module.exports = { handle };
+module.exports = {handle};
